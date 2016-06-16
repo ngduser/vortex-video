@@ -4,8 +4,18 @@
 
 <?php
 
-$connection = mysqli_connect(TBD);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
+$target_file = "uploads/" . basename($_FILES["uploaded_video"]["name"]);
+
+ if (move_uploaded_file($_FILES["uploaded_video"]["tmp_name"], $target_file)) {
+        echo "The file ". basename( $_FILES["uploaded_video"]["name"]). " has been uploaded.";
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
+
+$connection = new mysqli(REMOVED);
 
 	$v_id= $_POST['v_id'];
 	$file_type= $_POST['file_type'];
@@ -17,12 +27,9 @@ $connection = mysqli_connect(TBD);
 	$tn_id= $_POST['tn_id'];
 	$description= $_POST['description'];
 
-$sql = "INSERT INTO TESTVIDEO
+$connection->query("INSERT INTO Video
 	VALUES ('$v_id', '$file_type', '$length_sec', '$name',
-	 '$u_id', '$views', '$vid_filepath', '$tn_id','$description')";
-
-$query = mysqli_exec($connection, $sql)
-		 or die (mysqli_errormsg());
+'$u_id', '$views', '$vid_filepath', '$tn_id','$description')");
 
 mysqli_close($connection);
 
