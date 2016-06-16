@@ -6,42 +6,58 @@
 
 <?php
 
-$connection = mysqli('no','nousername','nopassword');
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+$connection = new mysqli(REMOVED);
 
-$sql = "SELECT *;  
-          FROM Video;"
 
-$query = mysqli_exec($connection, $sql)  
-            or die (mysqli_errormsg());
+if ($connection->connect_error) {
+    die("Connection failed: " . $connection->connect_error);
+} 
+ 
+
+$result = $connection->query("Select * from Video");
+
 
 
 echo "<B>Video Table</B>";
-echo "<P />";
+echo "<P/>";
 echo "<TABLE BORDER=1>"; 
 echo "<TR>
-	<TH>v_id</TH> 
-	<TH>file_type</TH>
-	<TH>length_sec</TH>
-	<TH>name</TH>
-	<TH>u_id</TH>
+        <TH>v_id</TH> 
+        <TH>file_type</TH>
+        <TH>length_sec</TH>
+        <TH>name</TH>
+        <TH>u_id</TH>
         <TH>views</TH>
-	<TH>vid_filepath</TH>
+        <TH>vid_filepath</TH>
         <TH>tn_id</TH>
-	<TH>description</TH> <TR>"; 
+        <TH>description</TH> <TR>"; 
 
 
-while($row = mysqli_fetch_array($query)) { 
+while ($row = mysqli_fetch_array($result)) {
     echo "<TR>";
-    echo "<TD>".$row."</TD>";
- 
-    echo "</TR>"; 
+    foreach ($row as $entry) {
+         echo "<TD>".$entry."</TD>";
+    }
+    
+    echo "<TR>";
 } 
 
-echo "</TABLE>"; 
 
-
+$result->close();
 mysqli_close($connection); 
 ?>
+
+<form enctype="multipart/form-data" form action="get_json.php" method="post">
+v_id: <input class="input" name="v_id"><br>
+
+<table border= "1">
+
+<input type="submit" value="Get Json" name="submit">
+
+
+</form>
 
 </body>
 </html>
