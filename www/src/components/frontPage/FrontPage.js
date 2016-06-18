@@ -1,57 +1,69 @@
 import React, { Component } from 'react';
+import FeatureCarousel from './FeatureCarousel.js';
+import Video from './Video.js';
+import $ from 'jquery';
 
-class Video extends Component {
-  render() {
-    return (
-      <div>
-        <video className="center-block" controls>
-          <source src={this.props.src}></source>
-          Your browser does not support HTML5 Video.
-        </video>
-      </div>
-    );
-  }
+const sliderStyle = {
+  height: "250px",
 }
 
-const bucketUrl = "https://s3.amazonaws.com/umuc.cmsc495.vigilant-video";
-const videos = ["TheOneTheyFear.mp4", "PingPong.mp4", "AvenueQ.webm"];
+const imgStyle = {
+  maxHeight: "100px",
+};
 
-class FrontPage extends Component {
+const cellStyle = {
+  textAlign: "center",
+};
+
+class Popular extends Component {
   state = {
-    index: 0,
+    videos: null
   };
 
-  incrementVideo = () => {
-    if (this.state.index < videos.length - 1) {
-      this.setState({ index: this.state.index + 1 });
-    }
-  };
+  componentDidMount() {
+    this.serverRequest = $.get('/featured', (data) => {
+      this.setState({ videos: data });
+    });
+  }
 
-  decrementVideo = () => {
-    if (this.state.index > 0) {
-      this.setState({ index: this.state.index - 1 });
-    }
-  };
+  componentWillUnmount() {
+    this.serverRequest.abort();
+  }
 
   render() {
-    const active_video_url = bucketUrl + "/" + videos[this.state.index];
-    const CurrentVideo = () => <Video src={active_video_url} />;
+    var image_cells = null;
+    if (this.state.videos !== null) {
+      image_cells = this.state.videos.map( (video) => (
+        <td style={ cellStyle } key={video.url} >
+          <img style={ imgStyle }
+               src={video.url.replace(/webm|mp4/, "jpg") }
+               alt={video.title} />
+        </td>
+      ) );
+    }
+
     return (
       <div className="container">
-        <div className="carousel">
-          <CurrentVideo />
-          <button className="left carousel-control"
-                  onClick={this.decrementVideo}>
-            <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-          </button>
-          <button className="right carousel-control"
-                  onClick={this.incrementVideo}>
-            <span className="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-          </button>
+        <h3>Popular</h3>
+        <div className="col-lg-12">
+          <table className="table table-bordered">
+            <tbody>
+              <tr>
+                { image_cells }
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     );
   }
 }
+
+const FrontPage = () => (
+  <div>
+    <FeatureCarousel />
+    <Popular />
+  </div>
+);
 
 export default FrontPage;
