@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FeatureCarousel from './FeatureCarousel.js';
-import Video from './Video.js';
 import $ from 'jquery';
+import ImageLink from '../common/ImageLink.js';
 
 const sliderStyle = {
   height: "250px",
@@ -20,6 +20,15 @@ class Popular extends Component {
     videos: null
   };
 
+  style = {
+    imageLinkContainer: {
+      textAlign: "center",
+    },
+    img: {
+      maxHeight: "100px",
+    }
+  };
+
   componentDidMount() {
     this.serverRequest = $.get('/featured', (data) => {
       this.setState({ videos: data });
@@ -35,9 +44,11 @@ class Popular extends Component {
     if (this.state.videos !== null) {
       image_cells = this.state.videos.map( (video) => (
         <td style={ cellStyle } key={video.url} >
-          <img style={ imgStyle }
-               src={video.url.replace(/webm|mp4/, "jpg") }
-               alt={video.title} />
+          <ImageLink to={`/watch?v=${video._id}`} 
+                     src={video.thumbnail_url}
+                     alt={video.title}
+                     style={ this.style }
+           />
         </td>
       ) );
     }

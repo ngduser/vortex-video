@@ -62,12 +62,24 @@
 
 	var _FrontPage2 = _interopRequireDefault(_FrontPage);
 
+	var _LoginForm = __webpack_require__(235);
+
+	var _LoginForm2 = _interopRequireDefault(_LoginForm);
+
+	var _RegisterForm = __webpack_require__(236);
+
+	var _RegisterForm2 = _interopRequireDefault(_RegisterForm);
+
+	var _WatchPage = __webpack_require__(237);
+
+	var _WatchPage2 = _interopRequireDefault(_WatchPage);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var links = [{ to: "about", text: "About" }, { to: "login", text: "Login" }, { to: "register", text: "Register" }];
 
 	// Components
 
-
-	var links = [{ to: "about", text: "About" }];
 
 	var App = function App(props) {
 	  return _react2.default.createElement(
@@ -115,6 +127,9 @@
 	    { path: '/', component: App },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _FrontPage2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: About }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _LoginForm2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _RegisterForm2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'watch', component: _WatchPage2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '*', component: NoMatch })
 	  )
 	), document.getElementById('app'));
@@ -228,6 +243,31 @@
 	// shim for using process in browser
 
 	var process = module.exports = {};
+
+	// cached from whatever global is present so that test runners that stub it
+	// don't break things.  But we need to wrap it in a try catch in case it is
+	// wrapped in strict mode code which doesn't define any globals.  It's inside a
+	// function because try/catches deoptimize in certain engines.
+
+	var cachedSetTimeout;
+	var cachedClearTimeout;
+
+	(function () {
+	  try {
+	    cachedSetTimeout = setTimeout;
+	  } catch (e) {
+	    cachedSetTimeout = function () {
+	      throw new Error('setTimeout is not defined');
+	    }
+	  }
+	  try {
+	    cachedClearTimeout = clearTimeout;
+	  } catch (e) {
+	    cachedClearTimeout = function () {
+	      throw new Error('clearTimeout is not defined');
+	    }
+	  }
+	} ())
 	var queue = [];
 	var draining = false;
 	var currentQueue;
@@ -252,7 +292,7 @@
 	    if (draining) {
 	        return;
 	    }
-	    var timeout = setTimeout(cleanUpNextTick);
+	    var timeout = cachedSetTimeout(cleanUpNextTick);
 	    draining = true;
 
 	    var len = queue.length;
@@ -269,7 +309,7 @@
 	    }
 	    currentQueue = null;
 	    draining = false;
-	    clearTimeout(timeout);
+	    cachedClearTimeout(timeout);
 	}
 
 	process.nextTick = function (fun) {
@@ -281,7 +321,7 @@
 	    }
 	    queue.push(new Item(fun, args));
 	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
+	        cachedSetTimeout(drainQueue, 0);
 	    }
 	};
 
@@ -24538,11 +24578,19 @@
 	    arity: true
 	};
 
-	module.exports = function hoistNonReactStatics(targetComponent, sourceComponent) {
+	var isGetOwnPropertySymbolsAvailable = typeof Object.getOwnPropertySymbols === 'function';
+
+	module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, customStatics) {
 	    if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
 	        var keys = Object.getOwnPropertyNames(sourceComponent);
-	        for (var i=0; i<keys.length; ++i) {
-	            if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]]) {
+
+	        /* istanbul ignore else */
+	        if (isGetOwnPropertySymbolsAvailable) {
+	            keys = keys.concat(Object.getOwnPropertySymbols(sourceComponent));
+	        }
+
+	        for (var i = 0; i < keys.length; ++i) {
+	            if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]] && (!customStatics || !customStatics[keys[i]])) {
 	                try {
 	                    targetComponent[keys[i]] = sourceComponent[keys[i]];
 	                } catch (error) {
@@ -25995,13 +26043,13 @@
 
 	var _FeatureCarousel2 = _interopRequireDefault(_FeatureCarousel);
 
-	var _Video = __webpack_require__(233);
-
-	var _Video2 = _interopRequireDefault(_Video);
-
 	var _jquery = __webpack_require__(232);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _ImageLink = __webpack_require__(234);
+
+	var _ImageLink2 = _interopRequireDefault(_ImageLink);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26039,6 +26087,13 @@
 
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Popular)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
 	      videos: null
+	    }, _this.style = {
+	      imageLinkContainer: {
+	        textAlign: "center"
+	      },
+	      img: {
+	        maxHeight: "100px"
+	      }
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
@@ -26059,15 +26114,19 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this3 = this;
+
 	      var image_cells = null;
 	      if (this.state.videos !== null) {
 	        image_cells = this.state.videos.map(function (video) {
 	          return _react2.default.createElement(
 	            'td',
 	            { style: cellStyle, key: video.url },
-	            _react2.default.createElement('img', { style: imgStyle,
-	              src: video.url.replace(/webm|mp4/, "jpg"),
-	              alt: video.title })
+	            _react2.default.createElement(_ImageLink2.default, { to: '/watch?v=' + video._id,
+	              src: video.thumbnail_url,
+	              alt: video.title,
+	              style: _this3.style
+	            })
 	          );
 	        });
 	      }
@@ -26139,6 +26198,10 @@
 
 	var _Video2 = _interopRequireDefault(_Video);
 
+	var _ImageLink = __webpack_require__(234);
+
+	var _ImageLink2 = _interopRequireDefault(_ImageLink);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26196,9 +26259,12 @@
 	      var videos = _state.videos;
 	      var index = _state.index;
 
-	      var active_video_url = videos === null ? "" : videos[index].url;
+	      var active_video = videos === null ? "" : videos[index];
 	      var CurrentVideo = function CurrentVideo() {
-	        return _react2.default.createElement(_Video2.default, { src: active_video_url });
+	        return _react2.default.createElement(_ImageLink2.default, { to: '/watch?v=' + active_video._id,
+	          src: active_video.thumbnail_url,
+	          alt: active_video.title
+	        });
 	      };
 	      return _react2.default.createElement(
 	        'div',
@@ -36325,6 +36391,350 @@
 	}(_react.Component);
 
 	exports.default = Video;
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(168);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var defaultStyle = {
+	  imageLinkContainer: {
+	    textAlign: "center"
+	  },
+
+	  img: {
+	    maxHeight: "300px"
+	  }
+	};
+
+	var ImageLink = function ImageLink(props) {
+	  var style = null;
+	  if (props.style !== undefined) {
+	    style = props.style;
+	  } else {
+	    style = defaultStyle;
+	  }
+
+	  return _react2.default.createElement(
+	    'div',
+	    { style: style.imageLinkContainer },
+	    _react2.default.createElement(
+	      _reactRouter.Link,
+	      { to: props.to },
+	      _react2.default.createElement('img', { src: props.src,
+	        alt: props.alt == undefined ? "" : props.alt,
+	        style: style.img
+	      })
+	    )
+	  );
+	};
+
+	exports.default = ImageLink;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(168);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var LoginForm = function LoginForm() {
+			return _react2.default.createElement(
+					'div',
+					{ className: 'container col-md-8' },
+					_react2.default.createElement(
+							'section',
+							null,
+							_react2.default.createElement(
+									'h1',
+									{ className: 'text-center' },
+									'Welcome to Vigilant Video'
+							),
+							_react2.default.createElement(
+									'h2',
+									{ className: 'text-center' },
+									'Login to your account'
+							),
+							_react2.default.createElement(
+									'div',
+									{ className: 'panel panel-default ' },
+									_react2.default.createElement(
+											'div',
+											{ className: 'panel-body' },
+											_react2.default.createElement(
+													'form',
+													{ className: 'form form-horizontal', style: { padding: "5px" }, action: '/Login', method: 'POST' },
+													_react2.default.createElement(
+															'div',
+															{ className: 'form-group' },
+															_react2.default.createElement(
+																	'label',
+																	{ 'for': 'username' },
+																	'Username:'
+															),
+															_react2.default.createElement('input', { className: 'form-control', type: 'text', name: 'username', autoComplete: 'off' })
+													),
+													_react2.default.createElement(
+															'div',
+															{ className: 'form-group' },
+															_react2.default.createElement(
+																	'label',
+																	{ 'for': 'password' },
+																	'Password:'
+															),
+															_react2.default.createElement('input', { className: 'form-control', type: 'password', name: 'password' })
+													),
+													_react2.default.createElement(
+															'div',
+															{ className: 'form-group' },
+															_react2.default.createElement(
+																	'button',
+																	{ type: 'submit', className: 'btn btn-primary pull-right', name: 'loginBtn' },
+																	'Login'
+															)
+													)
+											),
+											_react2.default.createElement(
+													'p',
+													null,
+													_react2.default.createElement(
+															'small',
+															null,
+															'Don\'t have an account? Register ',
+															_react2.default.createElement(
+																	_reactRouter.Link,
+																	{ to: '/register' },
+																	'here'
+															),
+															'.'
+													)
+											)
+									)
+							)
+					)
+			);
+	};
+
+	exports.default = LoginForm;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(168);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var RegisterForm = function RegisterForm() {
+			return _react2.default.createElement(
+					'div',
+					{ className: 'container col-md-8' },
+					_react2.default.createElement(
+							'section',
+							null,
+							_react2.default.createElement(
+									'h1',
+									{ className: 'text-center' },
+									'Welcome to Vigilant Video'
+							),
+							_react2.default.createElement(
+									'h2',
+									{ className: 'text-center' },
+									'Register an account'
+							),
+							_react2.default.createElement(
+									'div',
+									{ className: 'panel panel-default ' },
+									_react2.default.createElement(
+											'div',
+											{ className: 'panel-body' },
+											_react2.default.createElement(
+													'form',
+													{ className: 'form form-horizontal somePadding',
+															style: { padding: "5px" },
+															action: '/RegisterAccount', method: 'POST' },
+													_react2.default.createElement(
+															'div',
+															{ className: 'form-group' },
+															_react2.default.createElement(
+																	'label',
+																	{ 'for': 'username' },
+																	'Desired Username:'
+															),
+															_react2.default.createElement('input', { className: 'form-control', type: 'text', name: 'username' })
+													),
+													_react2.default.createElement(
+															'div',
+															{ className: 'form-group' },
+															_react2.default.createElement(
+																	'label',
+																	{ 'for': 'password' },
+																	'Password:'
+															),
+															_react2.default.createElement('input', { className: 'form-control', type: 'password', name: 'password' })
+													),
+													_react2.default.createElement(
+															'div',
+															{ className: 'form-group' },
+															_react2.default.createElement(
+																	'label',
+																	{ 'for': 'password' },
+																	'Re-enter Password:'
+															),
+															_react2.default.createElement('input', { className: 'form-control', type: 'password', name: 'password-repeat' })
+													),
+													_react2.default.createElement(
+															'div',
+															{ className: 'form-group' },
+															_react2.default.createElement(
+																	'button',
+																	{ type: 'submit', className: 'btn btn-primary pull-right', name: 'loginBtn' },
+																	'Register'
+															)
+													)
+											),
+											_react2.default.createElement(
+													'p',
+													null,
+													_react2.default.createElement(
+															'small',
+															null,
+															'Already have an account? Login ',
+															_react2.default.createElement(
+																	_reactRouter.Link,
+																	{ to: '/login' },
+																	'here'
+															),
+															'.'
+													)
+											)
+									)
+							)
+					)
+			);
+	};
+
+	exports.default = RegisterForm;
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Video = __webpack_require__(233);
+
+	var _Video2 = _interopRequireDefault(_Video);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var WatchPage = function (_Component) {
+	  _inherits(WatchPage, _Component);
+
+	  function WatchPage() {
+	    var _Object$getPrototypeO;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, WatchPage);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(WatchPage)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
+	      video: null
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(WatchPage, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      var video_id = this.props.location.query.v;
+	      this.serverRequest = $.get('/api/video?id=' + video_id, function (data) {
+	        _this2.setState({ video: data });
+	      });
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.serverRequest.abort();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var video = this.state.video;
+
+	      var CurrentVideo = null;
+	      if (video === null) {
+	        CurrentVideo = function CurrentVideo() {
+	          return _react2.default.createElement('div', null);
+	        };
+	      } else {
+	        CurrentVideo = function CurrentVideo() {
+	          return _react2.default.createElement(_Video2.default, { src: video.url });
+	        };
+	      }
+	      return _react2.default.createElement(CurrentVideo, null);
+	    }
+	  }]);
+
+	  return WatchPage;
+	}(_react.Component);
+
+	exports.default = WatchPage;
 
 /***/ }
 /******/ ]);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import Video from './Video.js';
+import Video from '../common/Video.js';
+import ImageLink from '../common/ImageLink.js';
 
 class FeatureCarousel extends Component {
   state = {
@@ -32,8 +33,13 @@ class FeatureCarousel extends Component {
 
   render() {
     const { videos, index } = this.state;
-    const active_video_url = videos === null ? "" : videos[index].url;
-    const CurrentVideo = () => <Video src={active_video_url} />;
+    const active_video = videos === null ? "" : videos[index];
+    const CurrentVideo = () => (
+      <ImageLink to={`/watch?v=${active_video._id}`} 
+                 src={active_video.thumbnail_url}
+                 alt={active_video.title}
+      />
+    );
     return (
       <div className="container">
         <div className="carousel">
