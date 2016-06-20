@@ -3,19 +3,29 @@
 <body>
 
 <?php
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+$ffmpeg = '/usr/bin/ffmpeg';
 $target_file = "uploads/" . basename($_FILES["uploaded_video"]["name"]);
 
- if (move_uploaded_file($_FILES["uploaded_video"]["tmp_name"], $target_file)) {
+
+$command = $ffmpeg . ' -i ' . $_FILES["uploaded_video"]["tmp_name"] .  ' -vstats 2>&1';
+$attributes = shell_exec($command);  
+echo  $attributes;
+
+
+
+$ext = pathinfo($target_file,PATHINFO_EXTENSION);
+
+
+if (move_uploaded_file($_FILES["uploaded_video"]["tmp_name"], $target_file)) {
         echo "The file ". basename( $_FILES["uploaded_video"]["name"]). " has been uploaded.";
 } else {
 	echo "Error with file upload!";
 }
 
-$conn = new mysqli("localhost", "495", "aQXGsyYCwy3n4FeM", "vigilant");
+$conn = new mysqli(REMOVED);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$name = verify_input($_POST['name']);
@@ -38,8 +48,6 @@ function verify_input($input) {
 
 $conn->query("INSERT INTO Video (name, u_id, description)
 	VALUES ('$name', '$u_id', '$description')");
-
-
 
 mysqli_close($conn);
 
