@@ -10,10 +10,18 @@ $ffmpeg = '/usr/bin/ffmpeg';
 $target_file = "uploads/" . basename($_FILES["uploaded_video"]["name"]);
 
 
-$command = $ffmpeg . ' -i ' . $_FILES["uploaded_video"]["tmp_name"] .  ' -vstats 2>&1';
+$command = $ffmpeg . ' -i ' . $_FILES["uploaded_video"]["tmp_name"] .  ' -vstats 2>&1 | grep Duration';
 $attributes = shell_exec($command);  
 echo  $attributes;
 
+$regex_duration = '(Duration:\\s+)';	
+$regex_length = '((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?)?\\.\\d+)';
+
+if (preg_match_all ("/".$regex_duration.$regex_length."/is", $attributes, $match))
+{
+      $length = $match[2][0];
+      echo $length;
+}
 
 
 $ext = pathinfo($target_file,PATHINFO_EXTENSION);
