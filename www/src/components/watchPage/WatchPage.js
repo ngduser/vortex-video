@@ -24,10 +24,20 @@ class WatchPage extends Component {
     if ( video === null ) {
       CurrentVideo = () => <div></div>;
     } else {
-      CurrentVideo = () => <Video src={video.url}/>;
+      CurrentVideo = () => (
+        <div style={{
+          textAlign: "center"
+        }}>
+          <Video src={video.url}/>
+          <h3>{video.title}</h3>
+          <p>
+            {video.desc}
+          </p>
+        </div>
+      );
     }
     return (
-      <CurrentVideo></CurrentVideo>
+        <CurrentVideo />
     );
   }
 }
