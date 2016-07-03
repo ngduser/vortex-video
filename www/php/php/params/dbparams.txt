@@ -1,0 +1,4 @@
+username=root
+password=anw-pass
+host=mysql
+db=vigilant-video
