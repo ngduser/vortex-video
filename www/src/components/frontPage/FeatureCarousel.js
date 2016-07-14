@@ -34,16 +34,25 @@ class FeatureCarousel extends Component {
   render() {
     const { videos, index } = this.state;
     const active_video = videos === null ? "" : videos[index];
-    const CurrentVideo = () => (
+    const CurrentVideo = (props) => (
       <ImageLink to={`/watch?v=${active_video._id}`} 
                  src={active_video.thumbnail_url}
-                 alt={active_video.title}
-      />
+                 alt={active_video.title}>
+        { props.children }
+      </ImageLink>
     );
     return (
       <div className="container">
         <div className="carousel">
-          <CurrentVideo />
+          <CurrentVideo>
+            <div style={{
+            }}>
+              <h3>{active_video.title}</h3>
+              <p>
+                {active_video.desc}
+              </p>
+            </div>
+          </CurrentVideo>
           <button className="left carousel-control"
                   onClick={this.decrementVideo}>
             <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>

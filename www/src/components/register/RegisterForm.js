@@ -13,21 +13,25 @@ const RegisterForm = () => (
 
 	<form className="form form-horizontal somePadding" 
               style={{ padding: "5px" }}
-              action="/RegisterAccount" method="POST">
+              action="/auth/reg" method="POST">
+
 	  <div className="form-group">
-	    <label for="username">Desired Username:</label>
+	    <label htmlFor="username">Desired Username:</label>
 	    <input className="form-control" type="text" name="username" />
 	  </div>
+
 	  <div className="form-group">
-	    <label for="password">Password:</label>
-	    <input className="form-control" type="password" name="password" />
+	    <label htmlFor="password">Password:</label>
+	    <input className="form-control" type="password" name="pass1" />
 	  </div>
+
 	  <div className="form-group">
-	    <label for="password">Re-enter Password:</label>
-	    <input className="form-control" type="password" name="password-repeat" />
+	    <label htmlFor="password">Re-enter Password:</label>
+	    <input className="form-control" type="password" name="pass2" />
 	  </div>
+
 	  <div className="form-group">
-	    <button type="submit" className="btn btn-primary pull-right" name="loginBtn">Register</button>
+	    <input type="submit" className="btn btn-primary pull-right" name="register" value="Register" />
 	  </div>
 	</form>
 

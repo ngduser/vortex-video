@@ -1,41 +1,93 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import $ from 'jquery';
 
-const LoginForm = () => (
-  <div className="container col-md-8">
-    <section>
-      <h1 className="text-center">Welcome to Vigilant Video</h1>
-      <h2 className="text-center">Login to your account</h2>
+class LoginForm extends Component {
+  //constructor(props, context) {
+  //  super(props);
 
-      <div className="panel panel-default ">
-	<div className="panel-body">
+  //  this.state = {
+  //    username: "",
+  //    password: "",
+  //  };
+  //}
+  state = {
+     username: "",
+     password: "",
+  };
 
-	  <form className="form form-horizontal" style={{padding: "5px" }}action="/Login" method="POST">
+  componentWillUnmount() {
+    if (this.serverRequest !== undefined) {
+      this.serverRequest.abort();
+    }
+  };
 
-	    <div className="form-group">
-	      <label for="username">Username:</label>
-	      <input className="form-control" type="text" name="username" autoComplete="off"/>
-	    </div>
+  handleSubmit = (e) => {
+    e.preventDefault();
 
-	    <div className="form-group">
-	      <label for="password">Password:</label>
-	      <input className="form-control" type="password" name="password" />
-	    </div>
+    this.serverRequest = $.ajax({
+      url: "/auth/login",
+      type: "POST",
+      dataType: 'json',
+      async: true,
+      data: this.state,
+      success: (data) => {
+        if (data.success === true) {
+          this.context.router.push('/');
+        }
+        console.log(data);
+      },
+    });
+  };
 
-	    <div className="form-group">
-	      <button type="submit" className="btn btn-primary pull-right" name="loginBtn">Login</button>
-	    </div>
+  setUsername = (e) => this.setState( { username: e.target.value } );
+  setPassword = (e) => this.setState( { password: e.target.value } );
 
-	  </form>
+  render() {
+    return (
+      <div className="container col-md-8">
+        <section>
+          <h1 className="text-center">Welcome to Vigilant Video</h1>
+          <h2 className="text-center">Login to your account</h2>
 
-	  <p>
-	    <small>Don't have an account? Register <Link to="/register">here</Link>.</small>
-	  </p>
+          <div className="panel panel-default ">
+            <div className="panel-body">
 
-	</div>
+              <form className="form form-horizontal" style={{padding: "5px" }} 
+                     action="/auth/login" onSubmit={ this.handleSubmit }>
+
+                <div className="form-group">
+                  <label htmlFor="username">Username:</label>
+                  <input className="form-control" type="text" autoComplete="off"
+                         value={this.state.username} onChange={this.setUsername}/>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="password">Password:</label>
+                  <input className="form-control" type="password" name="password" 
+                         value={this.state.password} onChange={this.setPassword}/>
+                </div>
+
+                <div className="form-group">
+                  <button type="submit" className="btn btn-primary pull-right" name="loginBtn">Login</button>
+                </div>
+
+              </form>
+
+              <p>
+                <small>Don't have an account? Register <Link to="/register">here</Link>.</small>
+              </p>
+
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
-  </div>
-);
+    );
+  }
+}
+
+LoginForm.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 export default LoginForm;

@@ -27,6 +27,7 @@ const ImageLink = (props) => {
              style={ style.img }
         />
       </Link>
+      { props.children }
     </div>
   );
 };
