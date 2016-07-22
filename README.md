@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 #Vortex Video
 
 Vortex Video is a project designed to create an online accessible Content Management System with Content Delivery 
@@ -13,10 +13,15 @@ interacts with and requires a CMS, CD, or video streaming application for develo
 ###Prerequisite Hosting System Requirements
 
 -Linux Server Distro (Kernel 4.5.7 tested)
+
 -Nginx 1.11.0
+
 -MySQL 5.5.49
+
 -PHP 5.5.30
+
 -NodeJS 5.0.1
+
 
 ###Installing
 
@@ -51,7 +56,8 @@ Run SQL scripts to create necessary tables.
 
 Start using site features to populate database and S3 bucket. 
 
-Develop.
+
+##Develop
 
 Please read CONTRIBUTING.md (currently under development) for details on our code of conduct, and the process for
 submitting pull requests to us.
@@ -61,6 +67,4 @@ submitting pull requests to us.
 
 This project is licensed under the MIT License - see the LICENSE.md file for details
 
-Acknowledgments
-
->>>>>>> f6b11cd2aac054df62fac8a1a6a948b38df70b10
+A
