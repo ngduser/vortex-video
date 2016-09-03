@@ -5,8 +5,8 @@ CREATE TABLE `VideoData` (
 	`Name` varchar( 15 ) DEFAULT NULL ,
 	`Description` varchar( 255 ) DEFAULT NULL ,
 	`Location` varchar( 127 ) DEFAULT NULL ,
-	`Creation` TIMESTAMP NOT NULL DEFAULT NOW( ) ,
-	`Upload` datetime DEFAULT NULL ,
+	`Uploaded` TIMESTAMP NOT NULL DEFAULT NOW( ) ,
+	`Created` datetime DEFAULT NULL ,
 	`File` varchar( 127 ) DEFAULT NULL ,
 	PRIMARY KEY ( `ID` )
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
