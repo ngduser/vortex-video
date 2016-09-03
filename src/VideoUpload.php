@@ -21,7 +21,7 @@
                         'version' => 'latest'));
 
 			$this->tmp_name = $tmp_name;
-			$this->name = $name;
+						$this->name = $name;
 			$target_file = "uploads/" . basename($name);
 			$ext = pathinfo($target_file,PATHINFO_EXTENSION);
 			$id = null;
@@ -37,24 +37,26 @@
 			$input = htmlspecialchars($input);
 			return $input;
 		} 
-  
-		function videoAttributes() {
-                        $command= $this->ffmpeg . ' -i ' .  $this->tmp_name .  ' -vstats 2>&1 | grep "Duration\|Audio\|creation" ';
-                        $attributes = shell_exec($command);
-                        $this->attributes = $attributes;
-                        $regex_duration = '(Duration:\\s+)';
-                        $regex_length = '((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?)?\\.\\d+)';
 
-                        if (preg_match_all ("/".$regex_duration.$regex_length."/is", $attributes, $match)) {
-                                $this->length = $match[2][0];
-                        }
-                }
+		function videoAttributes() {
+			$command = $this->ffmpeg . ' -i ' .  $this->tmp_name .  ' -vstats 2>&1 | grep "Duration\|Audio\|creation" ';
+			$attr_output = shell_exec($command);
+			$this->attributes = $attr_output;
+
+			$regex='.*?((?:2|1)\\d{3}(?:-|\\/)(?:(?:0[1-9])|(?:1[0-2]))(?:-|\\/)(?:(?:0[1-9])|(?:[1-2][0-9])|(?:3[0-1]))(?:T|\\s)(?:(?:[0-1][0-9])|(?:2[0-3])):(?:[0-5][0-9]):(?:[0-5][0-9])).*?((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?)?).*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?(\\d\\d\\d)';
+
+			if (preg_match_all ("/".$regex."/is", $attr_output, $matches)) {
+ 				$timestamp1=$matches[1][0];
+   				$time1=$matches[2][0];
+     				$d1=$matches[3][0];
+				echo "$timestamp1 $time1 $d1"; 
+			}
+		}
 
 		function localUpload() {
 			if (move_uploaded_file($tmp_name, $target_file)) {
-        		echo "The file ". basename($name). " has been uploaded.";
-			} 
-			
+
+			}
 			else {
 				echo "Error with file upload!";
 			}
