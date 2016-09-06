@@ -30,6 +30,7 @@
 
 
 		}
+
 		//Sanatizes SQL Input to Prevent Injection
 		function verifyInput($input) {
 			$input = trim($input);
@@ -43,13 +44,13 @@
 			$attr_output = shell_exec($command);
 			$this->attributes = $attr_output;
 
-			$regex='.*?((?:2|1)\\d{3}(?:-|\\/)(?:(?:0[1-9])|(?:1[0-2]))(?:-|\\/)(?:(?:0[1-9])|(?:[1-2][0-9])|(?:3[0-1]))(?:T|\\s)(?:(?:[0-1][0-9])|(?:2[0-3])):(?:[0-5][0-9]):(?:[0-5][0-9])).*?((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?)?).*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?(\\d\\d\\d)';
+			$regex = '.*?((?:2|1)\\d{3}(?:-|\\/)(?:(?:0[1-9])|(?:1[0-2]))(?:-|\\/)(?:(?:0[1-9])|(?:[1-2][0-9])|(?:3[0-1]))(?:T|\\s)(?:(?:[0-1][0-9])|(?:2[0-3])):(?:[0-5][0-9]):(?:[0-5][0-9])).*?((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?)?).*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?\\d.*?(\\d\\d\\d)';
 
-			if (preg_match_all ("/".$regex."/is", $attr_output, $matches)) {
- 				$timestamp1=$matches[1][0];
-   				$time1=$matches[2][0];
-     				$d1=$matches[3][0];
-				echo "$timestamp1 $time1 $d1"; 
+			if (preg_match_all ("/".$regex."/is", $attr_output, $match)) {
+ 				$creation_date = verifyInput($match[1][0]);
+   				$duration_time = veryifyInput($match[2][0]);
+     				$bitrate = verifyInput($match[3][0]);
+ 				echo $creation_date $duration_time $bitrate;
 			}
 		}
 
@@ -83,9 +84,8 @@
 
 			$url = $operation['ObjectURL'];
 		}
-			
 		function finishClean() {
 			unlink($target_file);
 		}
 	}
-?>		
+?>
