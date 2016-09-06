@@ -39,6 +39,7 @@
 			$this->ffmpeg = "/usr/bin/ffmpeg";
 			
 			$this->videoAttributes();
+			$this->preparedSQL();
 
 		}
 
@@ -96,6 +97,20 @@
 
 			$url = $operation['ObjectURL'];
 		}
+
+		function preparedSQL() {
+			$connection = new mysqli("localhost", "vortex", "testpassword", "Vortex");
+			if ($connection->connect_error) {
+    				die("Connection failed: " . $connection->connect_error);
+			}
+			else{
+				$connection->query("INSERT INTO VideoData (UUID, Duration, Name, Description, Bitrate, Created)
+					VALUES ('$this->uuid', '$this->duration', '$this->name', '$this->description', '$this->bitrate', '$this->created')");
+
+			}
+
+			mysqli_close($connection);
+		}
 		
 		function finishClean() {
 			unlink($target_file);
@@ -106,6 +121,7 @@
 			echo $this->duration;
 			echo $this->name;
 			echo $this->description;
+			echo $this->bitrate;
 			//echo $this->uploaded;
 			echo $this->created;
 			//echo $this->file;
