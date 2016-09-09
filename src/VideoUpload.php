@@ -17,7 +17,7 @@
 
 		//Shared Variables
 		private $ext;
-	//	private $target_file;
+		private $target_file;
 		private $bucket;
 		private $ffmpeg;
 		private $s3Client;
@@ -32,9 +32,9 @@
 			$this->bucket = 'vigilant-bucket';
 			$this->tmp_name = $tmp_name;
 			$this->name = $name;
-			$this->file= basename($name);
-			$target_file = "uploads/" . basename($name);
-			$ext = pathinfo($target_file,PATHINFO_EXTENSION);
+			$this->file = basename($name);
+//			$this->target_file = "uploads/" . basename($name);
+//			$ext = pathinfo($target_file,PATHINFO_EXTENSION);
 //			$video_name = basename($name);
 			$this->ffmpeg = "/usr/bin/ffmpeg";
 			
@@ -68,7 +68,7 @@
 		}
 
 		function localUpload() {
-			if (move_uploaded_file($tmp_name, $target_file)) {
+			if (move_uploaded_file($this->tmp_name, "uploads/" . $this->file )) {
 
 			}
 			else {
@@ -78,7 +78,8 @@
 		}
 
 		function makeThumbnail() {
-			$cmd = $this->ffmpeg . '-i' . $this->target_file . '-deinterlace -an -ss 10 -f mjpeg -t 1 -r 1 -y -s 240x135' . $this->thmb . '2>&1';
+			$thumb = "uploads/" . $this->uuid . ".jpg";
+			$cmd = $this->ffmpeg . ' -i ' . "uploads/" . $this->name . ' -deinterlace -an -ss 10 -f mjpeg -t 1 -r 1 -y -s 240x135 ' . $thumb . ' 2>&1';
 			$cmd_output = exec($cmd);
 		}
 
