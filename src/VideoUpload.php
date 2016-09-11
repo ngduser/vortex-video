@@ -29,7 +29,7 @@
                         'region'  => 'us-west-2',
                         'version' => 'latest'));
 
-			$this->bucket = 'vigilant-bucket';
+			$this->bucket = 'vortex-bucket';
 			$this->tmp_name = $tmp_name;
 			$this->name = $name;
 			$this->file = basename($name);
@@ -40,7 +40,6 @@
 			
 			$this->videoAttributes();
 			$this->preparedSQL();
-
 		}
 
 		//Sanatizes SQL Input to Prevent Injection
@@ -77,26 +76,38 @@
 
 		}
 
-		function makeThumbnail() {
+		function makeThumbnail() {	
 			$thumb = "uploads/" . $this->uuid . ".jpg";
 			$cmd = $this->ffmpeg . ' -i ' . "uploads/" . $this->name . ' -deinterlace -an -ss 10 -f mjpeg -t 1 -r 1 -y -s 240x135 ' . $thumb . ' 2>&1';
 			$cmd_output = exec($cmd);
 		}
 
-		function uploadFile($key, $path) {
-			$keyname = $id . "." . $ext;
+		function uploadFile() {
+			
+			$keyname = $this->uuid . "." . pathinfo("uploads/" . $this->file,PATHINFO_EXTENSION);
+
 
 			//Transfer Local Upload to Bucket
-			$filepath = "/srv/Sites/Vigilant/www/php/uploads/" . $id;
-			$operation = $s3Client->putObject(array(
-    				'Bucket'       => $bucket,
-   				'Key'          => $keyname,
-    				'SourceFile'   => $filepath,
+			$filepath = "/srv/Sites/Vigilant/www/php/uploads/" . $this->file;
+			
+         		$video_operation = $this->s3Client->putObject(array(
+                                'Bucket'       => $this->bucket,
+                                'Key'          => $keyname,
+                                'SourceFile'   => $filepath,
+                                'ContentType'  => 'text/plain',
+                                'ACL'          => 'public-read',
+                                'StorageClass' => 'REDUCED_REDUNDANCY',));
+			
+			$thmb_name = $this->uuid . ".jpg";
+			$path = "/srv/Sites/Vigilant/www/php/uploads/" . $thmb_name;
+		
+			$thumb_operation = $this->s3Client->putObject(array(
+    				'Bucket'       => $this->bucket,
+   				'Key'          => $thmb_name,
+    				'SourceFile'   => $path,
     				'ContentType'  => 'text/plain',
     				'ACL'          => 'public-read',
     				'StorageClass' => 'REDUCED_REDUNDANCY',));
-
-			$url = $operation['ObjectURL'];
 		}
 
 		function preparedSQL() {
