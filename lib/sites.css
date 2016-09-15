@@ -1,0 +1,72 @@
+
+
+.blc-outline {
+	position: relative;
+	color: #FFFFFF;
+	text-shadow: 0px 0px 2px #000000, 0px 0px 2px #000000, 0px 0px 2px #000000,0px 0px 2px #000000, 0px 0px 2px #000000, 0px 0px 2px #000000,0px 0px 2px #000000;
+}
+
+.thumbnail-attr {
+  display: block;
+  
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  
+
+  
+}
+.mrdaf {
+   font-family: 'Mr Dafoe', cursive;
+}
+.video-thumbs {
+  padding-right: 50px;
+  padding-left: 10px;
+}
+
+.center-text {
+   text-align: center;
+}
+
+.top-display {
+    min-height: 117px; 
+    height: 750px;
+    width: 100%;
+    position: relative; 
+    left: 0px; 
+    top: 0px; 
+    z-index: 0;
+}
+
+.head-theme {
+	background: no-repeat center center fixed;
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+ 	  -o-background-size: cover;
+	  background-size: cover;
+	position: relative;
+	color: white;
+text-shadow: 0px 0px 2px #000000, 0px 0px 2px #000000, 0px 0px 2px #000000,0px 0px 2px #000000, 0px 0px 2px #000000, 0px 0px 2px #000000,0px 0px 2px #000000;
+    	
+}
+
+.tested{
+	
+
+font-family: 'Titillium Web', sans-serif;
+
+
+	font-size: 100px;
+	text-shadow: 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white;
+}
+
+.mid-display {
+background: #696969;
+	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+	
+position: relative;
+color: white;
+}
+
