@@ -1,12 +1,12 @@
 CREATE TABLE `VideoData` (
-	`ID` int( 11 ) NOT NULL AUTO_INCREMENT ,
-	`Duration` time DEFAULT NULL ,
-	`Bitrate` smallint( 4 ) DEFAULT NULL ,
-	`Name` varchar( 15 ) DEFAULT NULL ,
-	`Description` varchar( 255 ) DEFAULT NULL ,
-	`Location` varchar( 127 ) DEFAULT NULL ,
-	`Uploaded` TIMESTAMP NOT NULL DEFAULT NOW( ) ,
-	`Created` datetime DEFAULT NULL ,
-	`File` varchar( 127 ) DEFAULT NULL ,
-	PRIMARY KEY ( `ID` )
-) ENGINE = InnoDB DEFAULT CHARSET = latin1;
+ `ID` int(11) NOT NULL AUTO_INCREMENT,
+ `Duration` time DEFAULT '00:00:00',
+ `Bitrate` smallint(4) DEFAULT '0',
+ `Name` varchar(127) DEFAULT 'File Name Unknown',
+ `Description` varchar(255) DEFAULT 'No Description Given',
+ `UUID` char(13) DEFAULT '-999',
+ `Uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ `Title` varchar(127) DEFAULT 'No Title Given',
+ PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1
+
