@@ -14,7 +14,7 @@
 
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="btn-group navbar-right">
-        	<a href="#" class="btn btn-default btn-lg">Upload</a>
+        	<a href="/upload.html" class="btn btn-default btn-lg">Upload</a>
         	<a href="#" class="btn btn-default btn-lg">About</a>
         	<a href="#" class="btn btn-default btn-lg">Contact</a>
 	</nav>
@@ -36,14 +36,14 @@
 	    $starting_row = 0;
 	}
 
-	$connection = new mysqli("localhost", "vortex", "testpassword", "vigilant");
+	$connection = new mysqli("localhost", "vortex", "testpassword", "Vortex");
 
 	if ($connection->connect_error) {
 	    die("Connection failed: " . $conn->connect_error);
 	}
 
 	else {
-		$result =  $connection->query("SELECT vid_filepath, tn_id, name FROM Video LIMIT $starting_row,20");
+		$result =  $connection->query("SELECT UUID, Ext, Title FROM VideoData LIMIT $starting_row,20");
 
 		$vid_array = array();
 
@@ -51,24 +51,27 @@
 			$vid_array[] = $row;
 		}
 
+		$filepath = 'https://s3-us-west-2.amazonaws.com/vortex-bucket/';
 		$builder_start = '<div class="container"> <div class="row">';
 		$builder_end = '</div>';
 		$builder_row = '<div class="row">';
 		$builder_1 = '<div class="col-lg-3 col-sm-4 col-xs-6"> <a href="';
 		$builder_2 = '" class="thumbnail-attr"> <img src="';
-		$builder_3 = '" class="img-responsive"> </a> <h3>';
+		$builder_3 = '.jpg" class="img-responsive"> </a> <h3>';
 		$builder_4 = '</h3> </div>';
 
 		$builder_newline = "\n";
 
 		$i = 0;
-		$tn_id = "tn_id";
-		$name = "name";
-		$vid_filepath = "vid_filepath";
+
+
+		$title = "Title";
+		$UUID = "UUID";
+		$ext = "Ext";
 
 		echo $builder_start;
 		foreach ($vid_array as $key => $value) {
-			echo $builder_newline, $builder_1, $value[$vid_filepath], $builder_2, $value[$tn_id], $builder_3, $value[$name], $builder_4, $builder_newline;
+			echo $builder_newline, $builder_1, $filepath, $value[$UUID], ".$value[$ext]",  $builder_2, $filepath, $value[$UUID], $builder_3, $value[$title], $builder_4, $builder_newline;
 		}
 
 		echo $builder_end, $builder_newline;
@@ -82,8 +85,7 @@
 		}
 
 	}
-	
-	echo "<form action='index.php' method='get'>
+	echo "<orm action='index.php' method='get'>
 	<button name='More' type='submit' value='$starting_row' style='border: none; background: none; padding: 0;'><h2>More</h2></button>";
 	mysqli_close($connection);
 ?>
