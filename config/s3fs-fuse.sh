@@ -19,6 +19,6 @@ mkdir /srv/s3mnt
 
 # Mount command won't work without AWS Credential file set up
  
-s3fs -o use_cache=/tmp/cache vortex-bucket /srv/s3mnt
+sudo s3fs vortex-bucket /srv/s3mnt -o allow_other
 
 
