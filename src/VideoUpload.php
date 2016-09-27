@@ -2,7 +2,7 @@
 	//Use AWS SDK for S3
 	require '/srv/Sites/lib/aws-autoloader.php';
 	use Aws\S3\S3Client;
-	
+
 	class VideoUpload {
 
 		//Attribute Variables
@@ -32,12 +32,18 @@
 
 			$this->bucket = 'vortex-bucket';
 			$this->tmp_name = $tmp_name;
+
+			echo "TTTT- " . $tmp_name . "        ";
 			$this->name = $name;
 			$this->file = basename($name);
 			$this->ffmpeg = "/usr/bin/ffmpeg";
 			$this->videoAttributes();
-		
-		
+			echo "<pre>"; 
+echo "POST:"; 
+print_r($_POST); 
+echo "FILES:"; 
+print_r($_FILES); 
+echo "</pre>";  
 		}
 
 		//Sanatizes SQL Input to Prevent Injection
@@ -49,8 +55,14 @@
 		}
 
 		function videoAttributes() {
-			$command = $this->ffmpeg . ' -i ' .  $this->tmp_name .  ' -vstats 2>&1 | grep "Duration\|Audio" ';
-			$attr_output = shell_exec($command);
+
+			echo $this->ffmpeg . ' -i ' .  $this->tmp_name .  ' -vstats 2>&1 | grep "Duration\|Audio"';
+			$command = exec($this->ffmpeg . ' -i ' .  $this->tmp_name .  ' -vstats 2>&1 | grep "Duration\|Audio" ', $attr_output, $return);
+			echo $command;
+			if ($return){ 
+				echo "error with Attributes";
+			}
+
 			$regex='.*?((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?).*?\\d+.*?\\d+.*?\\d+.*?(\\d+)';
 
 
