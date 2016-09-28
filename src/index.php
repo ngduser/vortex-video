@@ -55,7 +55,7 @@
 		$builder_start = '<div class="container"> <div class="row">';
 		$builder_end = '</div>';
 		$builder_row = '<div class="row">';
-		$builder_1 = '<div class="col-lg-3 col-sm-4 col-xs-6"> <a href="';
+		$builder_1 = '<div class="col-lg-4 col-sm-5 col-xs-6"> <a href="';
 		$builder_2 = '" class="thumbnail-attr"> <img src="';
 		$builder_3 = '.jpg" class="img-responsive"> </a> <h3>';
 		$builder_4 = '</h3> </div>';
@@ -75,6 +75,7 @@
 		}
 
 		echo $builder_end, $builder_newline;
+		mysqli_close($connection);
 
 		if (count($vid_array < 20)) {
 			$starting_row = 0;
@@ -85,9 +86,8 @@
 		}
 
 	}
-	echo "<orm action='index.php' method='get'>
+	echo "<form action='index.php' method='get'>
 	<button name='More' type='submit' value='$starting_row' style='border: none; background: none; padding: 0;'><h2>More</h2></button>";
-	mysqli_close($connection);
 ?>
 	<script src='/lib/jquery.min.js'> </script>
 	<script src='/lib/bootstrap.min.js'> </script>
