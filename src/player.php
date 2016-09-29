@@ -1,9 +1,7 @@
 <!doctype html>
-<html>
-<head>
-<title>
 
-<?php
+<head>
+<title><?php
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 
@@ -34,21 +32,28 @@
                         $builder_6 = '          </script>';
                         $builder_7 = '</head>';
                        $builder_8 = '<body>';
-                         $builder_9 = '          <video id=';
-                        $builder_10 = ' class="video-js vjs-default-skin" controls preload="auto" width="860" height="420" autoplay preload="auto">';
-                        $builder_11 = '         <source src="rtmp://www.videovortex.stream:1935/playback/';
-                        $builder_12 = " type='rtmp/";
-                        $builder_13 = "'>'";
-                        $builder_14 = '         </video>';
-                       $builder_15 = '</body>';
+                         $builder_9 = '          <video id="';
+                        $builder_10 = '" class="video-js vjs-default-skin" controls preload="auto" width="860" height="420" ';
+			$builder_11 = "data-setup='{";
+                        $builder_12 = '"Dispay_option":true}';
+                        $builder_13 = "'>";
 
-                  echo $result_arr['Title'] . $builder_1 . $nl . $builder_2 . $nl .  $builder_3 . $nl . $builder_4 . $nl . $builder_5 . $nl . $builder_6 . $nl . $builder_7 . $nl . $builder_8 . $nl;
-                        echo $builder_9 . $result_arr['Name'] . $builder_10 . $nl . $builder_11 . $result_arr['UUID'] . $result_arr['Ext'] . $builder_12 . $builder_13 . $nl;
-                        echo $builder_14 . $nl . $builder_15;
+
+
+
+
+			$builder_14 = '         <source src="rtmp://www.videovortex.stream:1935/playback/';
+			$builder_15 = " type='rtmp/";
+			$builder_16 = "'>";
+                        $builder_17 = '"';
+			$builder_18 = '         </video>';
+                       $builder_19 = '</body>';
+
+                  	echo $result_arr['Title'] . $builder_1 . $nl . $builder_2 . $nl .  $builder_3 . $nl . $builder_4 . $nl . $builder_5 . $nl . $builder_6 . $nl . $builder_7 . $nl . $builder_8 . $nl;
+                        echo $builder_9 . $result_arr['UUID'] . $builder_10 .  $builder_11 . $builder_12 . $builder_13 . $nl . $builder_14 . $result_arr['UUID'] . "." . $result_arr['Ext'] . '"';
+                        echo  $builder_15 . $result_arr['Ext'] . $builder_16 . $builder_17 . $nl . $builder_18 . $nl . $builder_19;
                 }
-
-
-	mysqli_close($conn);
+		mysqli_close($conn);
 	}
 
 ?>
