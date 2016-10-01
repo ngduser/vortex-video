@@ -70,6 +70,7 @@
 			$v_8 = " type='rtmp/";
 			$z_7 = '		 <source src="https://s3-us-west-2.amazonaws.com/vortex-bucket/';
 			$z_8 = " type='video/webm";
+			$z_9 = " type='video/ogg";
 
 			$v_9 = "'>";
                         $v_10 = '"';
@@ -91,8 +92,12 @@
 			if ($ext == "mkv") {
 				echo $v . $v_1 . $attr . $nl . $v_2 . $uuid . $v_3 .  $v_4 . $v_5 . $v_6 . $nl . $z_7 . $uuid . "." . $ext . '"' . $z_8 .  $v_9 . $v_10 . $nl . $v_11 . $v_12 . $nl;
 			}
-			else {
+			else if ($ext == "mp4") {
 				echo $v . $v_1 . $attr . $nl . $v_2 . $uuid . $v_3 .  $v_4 . $v_5 . $v_6 . $nl . $v_7 . $uuid . "." . $ext . '"' . $v_8 . $ext .  $v_9 . $v_10 . $nl . $v_11 . $v_12 . $nl;
+			}
+
+			else {
+				echo $v . $v_1 . $attr . $nl . $v_2 . $uuid . $v_3 .  $v_4 . $v_5 . $v_6 . $nl . $z_7 . $uuid . "." . $ext . '"' . $z_9 .  $v_9 . $v_10 . $nl . $v_11 . $v_12 . $nl;
 			}
 			echo $nl . $d_1 . $nl . $d_2 . $nl . $d_3;
                 }
