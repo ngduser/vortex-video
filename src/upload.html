@@ -2,55 +2,49 @@
 <html>
 
 <head>
-	<link rel="stylesheet" href="bootstrap.css"/>
+    <link rel="stylesheet" href="/lib/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/lib/sites.css"/>
 
-	   <title>Video Upload</title>
+	   <title>Video Vortex</title>
+
 </head>
 <body>
-	<div class="container-fluid">
 
-<nav class="navbar navbar-default navbar-fixed-top">
-	<div class="btn-group" pull-right>
-        <a href="#" class="btn btn-default btn-lg">Search</a>
-        <a href="#" class="btn btn-default btn-lg">Upload</a>
-        <a href="#" class="btn btn-default btn-lg">Contact</a>
-    </div>
-    
-</nav>
-    <div class="jumbotron center-text">
-    <h1>Video Vortex</h1>
-    <p>Video Vortex is a blah asdasjpd asdkj apsiodfsd aas some other text that I need toe wriet lalal allal a alluh akabar mustafa loood</p>
-    </div>
+<div class="container-fluid">
 
-
-
-
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="btn-group navbar-right">
+        	<a href="#" class="btn btn-default btn-lg">Upload</a>
+        	<a href="#" class="btn btn-default btn-lg">About</a>
+        	<a href="#" class="btn btn-default btn-lg">Contact</a>
+	</nav>
+<div>
+<div class="jumbotron center-text head-theme" style="background-image: url(/lib/d_cloud.gif);">
+    	<h1>Video Vortex</h1>
+    	<p>Video Streaming Content Management and Delivery</p>
 </div>
 	<div class="container">
 	<div class="center-block">
 	
-
-	
-		<form enctype="multipart/form-data" form action="upload_video.php" method="post">
+		<form enctype="multipart/form-data" form action="/php/video_upload.php" method="post">
 			<div class=form-group>
-			<h1>Video Upload</h1>
+				<h1>Video Upload</h1><br>					
 			
-			<br>					
-			<h4>Please Describe the Video in 140 Characters or Less:</h4>
-			<br>
-		
-			<textarea class="form-control" rows="2" id="comment" name="description"></textarea>
-			<br>
-			<br>
-			<br>
-			<br>
-			<input type="file" name="uploaded_video" id="uploaded_video">
-    		<input type="submit" value="Submit" class="btn btn-default btn-" name="submit">
-    		</div>
-    	
-		</form>		 
+				<h4>Please Enter a Title for the Uploaded Video:</h4><br>
+                                <textarea class="form-control" rows="1" id="comment" name="title"></textarea><br><br>
 
+				<h4>Now Describe the Video in 140 Characters or Less:</h4><br>
+				<textarea class="form-control" rows="2" id="comment" name="description"></textarea><br><br>
+			
+				<h4>Video:</h4><br>
+				<input type="file" name='uploaded_video' id="uploaded_video">    
+
+    				<input type="submit" value="Upload Video" class="btn btn-default btn-" name='submit'>
+    			</div>
+		</form>		 
 	</div>
 	</div>
 </body>
 </html>
+
+

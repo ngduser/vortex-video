@@ -18,12 +18,11 @@
         	<a href="#" class="btn btn-default btn-lg">About</a>
         	<a href="#" class="btn btn-default btn-lg">Contact</a>
 	</nav>
-<div>
-<div class="jumbotron center-text head-theme" style="background-image: url(/lib/vortex_header.png);">
-    	<h1>Video Vortex</h1>
-    	<p>Video Streaming Content Management and Delivery</p>
 </div>
-
+<div class="jumbotron center-text head-theme" style="background-image: url(/lib/d_cloud.gif)">
+        <h1>Video Vortex<h1>
+        <p>Video Streaming Content Management and Delivery</p>
+</div>
 <?php
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
@@ -43,7 +42,7 @@
 	}
 
 	else {
-		$result =  $connection->query("SELECT UUID, Ext, Title FROM VideoData LIMIT $starting_row,20");
+		$result =  $connection->query("SELECT ID, UUID, Ext, Title FROM VideoData LIMIT $starting_row,20");
 
 		$vid_array = array();
 
@@ -51,7 +50,8 @@
 			$vid_array[] = $row;
 		}
 
-		$filepath = 'https://s3-us-west-2.amazonaws.com/vortex-bucket/';
+		$filepath = 'http://www.videovortex.stream/php/player.php/';
+		$imagepath = 'https://s3-us-west-2.amazonaws.com/vortex-bucket/';
 		$builder_start = '<div class="container"> <div class="row">';
 		$builder_end = '</div>';
 		$builder_row = '<div class="row">';
@@ -64,14 +64,14 @@
 
 		$i = 0;
 
-
+		$id = "ID";
 		$title = "Title";
-		$UUID = "UUID";
+		$uuid = "UUID";
 		$ext = "Ext";
 
 		echo $builder_start;
 		foreach ($vid_array as $key => $value) {
-			echo $builder_newline, $builder_1, $filepath, $value[$UUID], ".$value[$ext]",  $builder_2, $filepath, $value[$UUID], $builder_3, $value[$title], $builder_4, $builder_newline;
+			echo $builder_newline, $builder_1, $filepath, $value[$id], $builder_2, $imagepath, $value[$uuid], $builder_3, $value[$title], $builder_4, $builder_newline;
 		}
 
 		echo $builder_end, $builder_newline;

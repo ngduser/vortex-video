@@ -23,7 +23,7 @@
 		</div>
 	</nav>
 </div>
-<div class="jumbotron center-text head-theme" style="background-image: url(/lib/vortex_header.png);">
+<div class="jumbotron center-text head-theme" style="background-image: url(/lib/d_cloud.gif);">
     	<h1>Video Vortex</h1>
     	<p>Video Streaming Content Management and Delivery</p>
 </div>
