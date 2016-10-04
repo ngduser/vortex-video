@@ -1,30 +1,3 @@
-<!Doctype html>
-<html>
-
-<head>
-    <link rel="stylesheet" href="/lib/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/lib/sites.css"/>
-
-	   <title>Video Vortex</title>
-
-</head>
-<body>
-
-<div class="container-fluid">
-
-	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="btn-group navbar-right">
-        	<a href="/upload.html" class="btn btn-default btn-lg">Upload</a>
-        	<a href="#" class="btn btn-default btn-lg">About</a>
-        	<a href="#" class="btn btn-default btn-lg">Contact</a>
-	</nav>
-</div>
-<div class="jumbotron center-text head-theme" style="background-image: url(/lib/d_cloud.gif); height:750px">
-        <div style="position: absolute; top: 40%; left:35%"> 
-	<h1>Video Vortex<h1>
-        <p>Video Streaming Content Management and Delivery</p>
-	</div>
-</div>
 <?php
 
 /*
@@ -37,6 +10,8 @@
 */
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
+
+	require("index_header.php");
 
 	//More variable sepecifies which sequential row to start populating
 	if (isset($_GET['More'])) {
@@ -55,7 +30,7 @@
 	}
 
 	else {
-		$result =  $connection->query("SELECT ID, UUID, Ext, Title FROM VideoData LIMIT $starting_row,20");
+		$result =  $connection->query("SELECT ID, UUID, Ext, Title FROM VideoData LIMIT $starting_row,15");
 
 		$vid_array = array();
 		while ($row = mysqli_fetch_array($result)) {
@@ -90,22 +65,19 @@
 		mysqli_close($connection);
 
 		//Set starting row for next page
-		if (count($vid_array < 19)) {
+		if (count($vid_array) < 15) {
 			$starting_row = 0;
 		}
 		
 		else {
-			$starting_row = $starting_row + 20;
+			$starting_row = $starting_row + 15;
 		}
 
 	}
 	echo "<form action='index.php' method='get'>
 	<button name='More' type='submit' value='$starting_row' style='border: none; background: none; padding: 0;'><h2>More</h2></button>";
-?>
-	<script src='/lib/jquery.min.js'> </script>
-	<script src='/lib/bootstrap.min.js'> </script>
-</body>
-</html>
 
+	require("footer.php");
+?>
 
 
