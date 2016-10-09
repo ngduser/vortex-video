@@ -67,7 +67,8 @@
 		private function videoAttributes() {
 			$command = exec($this->ffmpeg . ' -i ' .  $this->tmp_name .  ' -vstats 2>&1 | grep "Duration\|Audio" ', $output, $return);
 			if ($return){
-				echo "error 2";
+				header("Location:http://www.videovortex.stream/php/error.php/11");
+				die();
 			}
 
 			$attr_output = implode($output);
@@ -75,9 +76,15 @@
 
 
 			if (preg_match_all ("/".$regex."/is", $attr_output, $match)) {
- 				$this->duration = $match[1][0];
+ 					$this->duration = $match[1][0];
      				$this->bitrate = $match[2][0];
 			}
+
+			else {
+				header("Location:http://www.videovortex.stream/php/error.php/11");
+				die();
+			}
+
 			$this->description = $this->verifyInput($_POST['description']);
 			$this->title = $this->verifyInput($_POST['title']);
 			$this->uuid = uniqid();
@@ -91,7 +98,8 @@
 				$this->uploadFile();
 			}
 			else {
-				echo "Error 3";
+				header("Location:http://www.videovortex.stream/php/error.php/21");
+				die();
 			}
 		}
 
@@ -101,7 +109,8 @@
 			$command = exec($this->ffmpeg . ' -i ' . "\"/tmp/$this->name\"" . ' -ss 5 -y -f mjpeg -s 240x135 -vframes 1 '  . $thumb .' 2>&1', $output, $return);
 
 			if ($return) {
-				echo "error 4";
+				header("Location:http://www.videovortex.stream/php/error.php/11");
+				die();
 			}
 		}
 
@@ -112,23 +121,25 @@
 
 			//Transfer Local Upload to Bucket
 			$filepath = "/tmp/" . $this->file;
-         		$video_operation = $this->s3Client->putObject(array(
-                                'Bucket'       => $this->bucket,
-                                'Key'          => $keyname,
-                                'SourceFile'   => $filepath,
-                                'ContentType'  => 'text/plain',
-                                'ACL'          => 'public-read',
-                                'StorageClass' => 'REDUCED_REDUNDANCY',));
+         	$video_operation = $this->s3Client->putObject(array(
+                'Bucket'       => $this->bucket,
+                'Key'          => $keyname,
+                'SourceFile'   => $filepath,
+                'ContentType'  => 'text/plain',
+                'ACL'          => 'public-read',
+                'StorageClass' => 'REDUCED_REDUNDANCY',));
+			
 			$thmb_name = $this->uuid . ".jpg";
-
 			$path = "/tmp/" . $thmb_name;
+			
 			$thumb_operation = $this->s3Client->putObject(array(
-    				'Bucket'       => $this->bucket,
+    			'Bucket'       => $this->bucket,
    				'Key'          => $thmb_name,
-    				'SourceFile'   => $path,
-    				'ContentType'  => 'text/plain',
-    				'ACL'          => 'public-read',
-    				'StorageClass' => 'REDUCED_REDUNDANCY',));
+    		    'SourceFile'   => $path,
+    		    'ContentType'  => 'text/plain',
+    			'ACL'          => 'public-read',
+    			'StorageClass' => 'REDUCED_REDUNDANCY',));
+			
 			unlink("/tmp/" . $this->name);
 			unlink($path);
 		}
@@ -136,9 +147,11 @@
 		//Updates database with uuid, duration, filename, description, bitrate, title, and extension. 
 		private function preparedSQL() {
 			$connection = new mysqli("localhost", "vortex", "testpassword", "Vortex");
+			
 			if ($connection->connect_error) {
+					header("Location:http://www.videovortex.stream/php/error.php/41");
     				die("Connection failed: " . $connection->connect_error);
-    				echo "error 5";
+    				
 			}
 			else{
 				$connection->query("INSERT INTO VideoData ( UUID, Duration, Name, Description, Bitrate, Title, Ext)
@@ -164,8 +177,8 @@
 			$connection = new mysqli("localhost", "vortex", "testpassword", "Vortex");
 
 			if ($connection->connect_error) {
+					header("Location:http://www.videovortex.stream/php/error.php/31");
     				die("Connection failed: " . $connection->connect_error);
-    				echo "error 6";
 			}
 
 			$result = $connection->query("SELECT ID from VideoData where UUID='$this->uuid';");
@@ -173,7 +186,8 @@
 			$id = $result_arr['ID'];
 
 			if (is_null($result)) {
-				echo "error 7";
+				header("Location:http://www.videovortex.stream/php/error.php/31");
+				die();
 			}
 
 			mysqli_close($connection);
