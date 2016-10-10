@@ -60,6 +60,8 @@
 			$input = trim($input);
 			$input = stripslashes($input);
 			$input = htmlspecialchars($input);
+			$input = strtr($input, array('(' => '', ')' => ''));
+			echo $input;
 			return $input;
 		}
 
@@ -128,10 +130,10 @@
                 'ContentType'  => 'text/plain',
                 'ACL'          => 'public-read',
                 'StorageClass' => 'REDUCED_REDUNDANCY',));
-			
+
 			$thmb_name = $this->uuid . ".jpg";
 			$path = "/tmp/" . $thmb_name;
-			
+
 			$thumb_operation = $this->s3Client->putObject(array(
     			'Bucket'       => $this->bucket,
    				'Key'          => $thmb_name,
@@ -139,23 +141,22 @@
     		    'ContentType'  => 'text/plain',
     			'ACL'          => 'public-read',
     			'StorageClass' => 'REDUCED_REDUNDANCY',));
-			
+
 			unlink("/tmp/" . $this->name);
 			unlink($path);
 		}
 
 		//Updates database with uuid, duration, filename, description, bitrate, title, and extension. 
 		private function preparedSQL() {
+			$name = $this->verifyInput($this->name);
 			$connection = new mysqli("localhost", "vortex", "testpassword", "Vortex");
-			
 			if ($connection->connect_error) {
 					header("Location:http://www.videovortex.stream/php/error.php/41");
     				die("Connection failed: " . $connection->connect_error);
-    				
 			}
 			else{
 				$connection->query("INSERT INTO VideoData ( UUID, Duration, Name, Description, Bitrate, Title, Ext)
-					VALUES ( '$this->uuid', '$this->duration', '$this->name', '$this->description', '$this->bitrate', '$this->title', '$this->ext')");
+					VALUES ( '$this->uuid', '$this->duration', '$name', '$this->description', '$this->bitrate', '$this->title', '$this->ext')");
 			}
 
 			mysqli_close($connection);
