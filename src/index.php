@@ -61,21 +61,21 @@
 		}
 
 		echo $builder_end, $builder_newline;
-		
+
 		mysqli_close($connection);
 
 		//Set starting row for next page
 		if (count($vid_array) < 15) {
 			$starting_row = 0;
 		}
-		
+
 		else {
 			$starting_row = $starting_row + 15;
 		}
 
 	}
-	echo "<form action='index.php' method='get'>
-	<button name='More' type='submit' value='$starting_row' style='border: none; background: none; padding: 0;'><h2>More</h2></button>";
+
+	echo "    <form action='' method='get'>\n    <button name='More' type='submit' value='$starting_row' style='border: none; background: none; padding: 0;'>\n        <h2>More</h2>\n    </button>\n";
 
 	require("footer.php");
 ?>
