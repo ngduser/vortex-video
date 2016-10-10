@@ -17,7 +17,7 @@
 <div class="container-fluid">
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="btn-group navbar-right">
-        	<a href="/upload.html" class="btn btn-default btn-lg">Upload</a>
+        	<a href="/php/upload.php" class="btn btn-default btn-lg">Upload</a>
 		<a href="https://github.com/ngduser/vortex-video/blob/master/README.md" class="btn btn-default btn-lg">About</a>
                 <a href="http://www.denig.me/" class="btn btn-default btn-lg">Contact</a>
 		</div>
