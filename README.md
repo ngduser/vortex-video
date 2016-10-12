@@ -61,8 +61,6 @@ $ sudo apt-get update
 
 $ sudo apt-get install ffmpeg. 
 
-Create Amazon S3 bucket and set up configuration key.
-
 ###Update Config Data
 
 Edit configuration files to match what is in the repo.
